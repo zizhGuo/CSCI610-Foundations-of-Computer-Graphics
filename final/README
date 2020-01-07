@@ -1,0 +1,117 @@
+Zizhun Guo
+CSCI-610-01 Foundations of Computer Graphics
+README for the final project
+
+
+*INTRODUCTION
+The conrol flow of this project is similar to Lab6's since the basic framework is originated from it. This final project gets rid off the animation module and mapping selection module. The keyboard input function is moved to Viewing.cpp module so that all model transformation infomation can be modified within the Viewing.cpp. The display() function is kept for serving the same purpose but instead of setting lighting properties and viewing properties prior looping objects array, it changes to do separate lighting & model transformation for each individual object due to the three types of shader programs need to be applied separately. Like how objects are stored and created, this final object follows the same pattern by removing orignal shapes but adding specific shapes like silo, barn, etc. to the Shape.h and create functions to setup the objects' coordinates while displaying the image.
+
+	display():
+		sets current shader program that matches current object
+		select the current shader program
+		setting frustum
+		setting camera
+		foreach object:
+			if do texture:
+				sets transformation
+				sets texture mapping
+			if do shading:
+				sets transformation
+				sets shading model
+			select the buffers and draw it
+
+	
+Below the words descibes all modules:
+
+*1. Object construction
+
+**Type of objects:
+"Shapes.h"
+	***SILO1: (Cylinder) The very left taller silo on the left hand side of image.
+	***CAP1: (Sphere) The top semi-shpere for the silo1.
+	***SILO2: (Cylinder) The second silo on the left.
+	***CAP2: (Sphere) The top semi-shpere for the silo2.
+	***BARN1: (Cylinder) The body of the barn.
+	***CAP3: (Cone) The green cone top of the barn.
+	***BARN2: (Cylinder) The body of the tower on the top of the barn.
+	***CAP4: (Cone) The top of the tower top on the barn.
+	***GROUND: (Cube) The grand ground.
+
+*2. Shading and Texturing
+
+**Three types of shaders: flat, phong, texture mapping.
+	***flat.vert
+	***flat.frag
+	***phong.vert
+	***phong.frag
+	***texture.vert
+	***texture.frag
+**Flat shader keeps partial uniform paras for flat (no specular illumination)
+**Phong shader keeps all uniform paras
+**Texture shader keeps partial uniform paras (including specular illumination) without material color
+
+            |***SILO1:      textures; |        
+            |***CAP1:       phong;    |      
+            |***SILO2:      textures; |      
+            |***CAP2:       phong;    |      
+            |***BARN1:      textures; |      
+            |***CAP3:       flat;     |      
+            |***BARN2:      textures; |      
+            |***CAP4:       phong;    |      
+            |***GROUND:     phong;    |      
+
+
+**Material properties for shading (flat & phong):
+"Lighting.cpp"
+	Three sets of material properties:
+	***Green cone: CAP3
+	***Grey cone & spheres: CAP1 CAP2 CAP4
+	***Dark green ground: GROUND
+**Texture mapping source:
+	***silowall.jpg
+	(academic usage download for free)reference: https://www.textures.com/download/bricksmallnew0071/42600
+	***barnbody.jpg
+	(academic usage download for free)reference: https://www.textures.com/download/bricksmallstacked0010/30256
+
+
+3. *MODEL TRANSFORMATION (KEYBOARD INPUTS)
+"Viewing.cpp"
+
+**Keyboard input are used for finding the best approximation of image looks. 
+**Step 1: Setting up the Ground scale & translate coordiantes.
+**Step 2: Setting up the camera eye vector
+**Step 3: Setting up each object by selecting them first as current object using number keys then setting their scale & translate coordinates while documenting the information
+**Step 4: Using the ducumented data to replace the initial data
+
+**OBJECTS SETTING
+	***press'1' to set the current object to 'SILO1'
+	***press'2' to set the current object to 'CAP1'
+	***press'3' to set the current object to 'SILO2'
+	***press'4' to set the current object to 'CAP2'
+	***press'5' to set the current object to 'BARN1'
+	***press'6' to set the current object to 'CAP3'
+	***press'7' to set the current object to 'BARN2'
+	***press'8' to set the current object to 'CAP4'
+	***press'9' to set the current object to 'GROUND'
+
+	***press 'q' to increase current object's scale x-coordinates by 0.1f
+	***press 'a' to decrease current object's scale x-coordinates by 0.1f
+	***press 'w' to increase current object's scale y-coordinates by 0.1f
+	***press 's' to decrease current object's scale y-coordinates by 0.1f
+	***press 'e' to increase current object's scale z-coordinates by 0.1f
+	***press 'd' to decrease current object's scale z-coordinates by 0.1f
+
+	***press 'r' to increase current object's translate x-coordinates by 0.1f
+	***press 'f' to decrease current object's translate x-coordinates by 0.1f
+	***press 't' to increase current object's translate y-coordinates by 0.1f
+	***press 'g' to decrease current object's translate y-coordinates by 0.1f
+	***press 'y' to increase current object's translate z-coordinates by 0.1f
+	***press 'h' to decrease current object's translate z-coordinates by 0.1f
+
+**CAMERA SETTING (default offset = 0.1f)
+	***press 'Z' to increase 'eye vector' x-coordinates by 0.1f
+	***press 'X' to decrease 'eye vector' x-coordinates by 0.1f
+	***press 'C' to increase 'eye vector' y-coordinates by 0.1f
+	***press 'V' to decrease 'eye vector' y-coordinates by 0.1f
+	***press 'B' to increase 'eye vector' z-coordinates by 0.1f
+	***press 'N' to decrease 'eye vector' z-coordinates by 0.1f
